@@ -25,9 +25,9 @@
     ]
   },
   "input": {
-    "cron": {
-      "name": "tick",
-      "spec": "@every 10s"
+    "pfs": {
+      "repo": "getfiles",
+      "glob": "/"
     }
   }
 }
