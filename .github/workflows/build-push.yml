@@ -22,7 +22,6 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push
-      with:
       run: |-
         cd pipeline1 && docker build -t dwhitena/mgmt590-gcs:${{  github.sha }} .
         docker push dwhitena/mgmt590-gcs:${{  github.sha }} && cd ../
