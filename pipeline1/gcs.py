@@ -6,6 +6,8 @@ client = storage.Client()
 # https://console.cloud.google.com/storage/browser/[bucket-id]/
 bucket = client.get_bucket('mgmt590-class')
 
+print('fixed')
+
 # Push our file to the bucket
 blob = bucket.blob('test.txt')
 
