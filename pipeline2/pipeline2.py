@@ -99,7 +99,7 @@ def insertInDB(csvfilename):
         time.sleep(1) 
 
 
-for dirpath, dirs, files in os.walk("/pfs/getfiles/"):
+for dirpath, dirs, files in os.walk("/pfs/getfiles"):
    for file in files:
        print(os.path.join(dirpath, file)) 
        insertInDB(os.path.join(dirpath, file))

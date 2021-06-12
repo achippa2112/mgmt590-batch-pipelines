@@ -4,8 +4,8 @@
   },
   "description": "A pipeline that pushes answers to the database",
   "transform": {
-    "cmd": [ "python", "pipeline2.py" ],
-    "image": "achippa2112/mgmt590-sql:3bc3f2ea32fdc4306246e7f32da547ea270c508e",
+    "cmd": [ "python", "/app/pipeline2.py" ],
+    "image": "achippa2112/mgmt590-sql:9b001440dd0ba438b84700b4dea292f8ea2f2d85",
     "secrets": [ 
       {
         "name": "dbaccess",
@@ -18,17 +18,17 @@
 	"key": "password"
       },
       {
-        "name": "dbacces",
+        "name": "dbaccess",
 	"env_var": "PG_SSLCERT",
 	"key": "sslcert"
       },
       {
-        "name": "dbacces",
+        "name": "dbaccess",
 	"env_var": "PG_SSLROOTCERT",
 	"key": "sslrootcert"
       },
       {
-        "name": "dbacces",
+        "name": "dbaccess",
 	"env_var": "PG_SSLKEY",
 	"key": "sslkey"
       } 
