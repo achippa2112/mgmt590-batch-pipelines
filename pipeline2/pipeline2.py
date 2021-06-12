@@ -19,17 +19,17 @@ def create_connection():
       filecontents = os.environ.get('PG_SSLROOTCERT').replace("@","=")
       decoded_creds = base64.b64decode(filecontents)
       with open('.ssl/server-ca.pem', 'w') as f1:
-          f1.write(decoded_creds.decode("utf-8"))
+          f1.write(decoded_creds)
       
       filecontents = os.environ.get('PG_SSLCERT').replace("@","=")
       decoded_creds = base64.b64decode(filecontents)
       with open('.ssl/client-cert.pem', 'w') as f1:
-          f1.write(decoded_creds.decode("utf-8"))
+          f1.write(decoded_creds)
           
       filecontents = os.environ.get('PG_SSLKEY').replace("@","=")
       decoded_creds = base64.b64decode(filecontents)
       with open('.ssl/client-key.pem', 'w') as f1:
-          f1.write(decoded_creds.decode("utf-8"))
+          f1.write(decoded_creds)
     
 
       #Change unix permissions to restricted
@@ -54,8 +54,8 @@ def create_connection():
                             user,
                             dbname,password])
       conn = psycopg2.connect(dbconnect)
-    except Error as e:
-        print(e)
+    except:
+        print("Error occured")
 
     return conn
 
