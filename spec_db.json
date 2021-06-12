@@ -5,7 +5,7 @@
   "description": "A pipeline that pushes answers to the database",
   "transform": {
     "cmd": [ "python", "pipeline2.py" ],
-    "image": "achippa2112/mgmt590-sql:c62ae53f62625c9625af43b982aeb0444c24a20f",
+    "image": "achippa2112/mgmt590-sql:3bc3f2ea32fdc4306246e7f32da547ea270c508e",
     "secrets": [ 
       {
         "name": "dbaccess",

@@ -78,7 +78,13 @@ def runSqlQuery(query, params = None):
     conn.commit()
 
     conn.close()
-    
+
+#Function to get Unixtimestamp
+def getUnixTimeStamp():
+    systime = datetime.datetime.now()
+    unixTimeStamp = int(time.mktime(systime.timetuple()))
+    return unixTimeStamp
+
 def insertInDB(csvfilename):
     df = pd.read_csv(csvfilename)
     for index,row in df.iterrows():
@@ -86,13 +92,14 @@ def insertInDB(csvfilename):
         context = row['context']
         answer = row['answer']
         modelName = 'distilled-bert'
-        timestamp = csvfilename.replace(".csv","")[-10:]
+        timestamp = getUnixTimeStamp()
         params = (modelName,question,context,answer,timestamp)
         query = '''insert into answer_history(model_name, question, context, answer, timestamp) values(%s,%s,%s,%s,%s)'''
         runSqlQuery(query, params)
-    
+        time.sleep(1) 
 
 
-for dirpath, dirs, files in os.walk("/pfs/getfiles"):
+for dirpath, dirs, files in os.walk("/pfs/getfiles/"):
    for file in files:
+       print(os.path.join(dirpath, file)) 
        insertInDB(os.path.join(dirpath, file))
