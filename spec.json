@@ -11,7 +11,7 @@
       "export GOOGLE_APPLICATION_CREDENTIALS=/app/creds.json",
       "python /app/gcs.py"
     ],
-    "image": "achippa2112/mgmt590-gcs:5762b7372b2feb7cff9b2cec475d85e8c0c37a53",
+    "image": "achippa2112/mgmt590-gcs:44146100b34cb2c53e25ca17ac6e893e5dd61336",
     "secrets": [ {
         "name": "gcsaccess",
         "env_var": "GCS_ACCESS",
@@ -21,11 +21,8 @@
   "input": {
     "cron": {
       "name": "tick",
-      "spec": "@every 10s"
-    },
-    "pfs": {
-      "repo": "images",
-      "glob": "/*"
+      "spec": "@every 100s",
+      "repo": "images"
     }
   }
 }
