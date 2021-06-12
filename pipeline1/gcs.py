@@ -41,9 +41,13 @@ for filecsv in client.list_blobs('gcsrestapi'):
     timestamp = str(int(time.time()))
     try:
         with open(os.path.join("/pfs/out",filecsv.name.replace(".csv",timestamp+".csv")), 'w') as f:
-            fileWriter = csv.writer(f, delimiter=',')
+            fieldnames = ['question','context','answer']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+
             for row in zip(*final_file):
-                fileWriter.writerow(row)
+                writer.writerow({'question': row[0],'context': row[1], 'answer': row[2]})
+
     except:
         print("Failed created csv file with answers for "+filecsv.name)
     else:
