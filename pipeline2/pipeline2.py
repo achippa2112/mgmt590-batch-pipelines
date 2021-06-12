@@ -1,14 +1,98 @@
-from google.cloud import storage
+import pandas as pd
+import psycopg2
+import os
+import datetime, time
+import base64
 
-# creating a GCS client
-client = storage.Client()
+#Function to create DB connection
+def create_connection():
+    """ create a database connection
+    """
+    conn = None
+    try:
+      
+      # Process SSL certificates
+      if not os.path.exists('.ssl'):
+          os.makedirs('.ssl')
+         
+      #Get GCS credentials 
+      filecontents = os.environ.get('PG_SSLROOTCERT').replace("@","=")
+      decoded_creds = base64.b64decode(filecontents)
+      with open('.ssl/server-ca.pem', 'w') as f1:
+          f1.write(decoded_creds.decode("utf-8"))
+      
+      filecontents = os.environ.get('PG_SSLCERT').replace("@","=")
+      decoded_creds = base64.b64decode(filecontents)
+      with open('.ssl/client-cert.pem', 'w') as f1:
+          f1.write(decoded_creds.decode("utf-8"))
+          
+      filecontents = os.environ.get('PG_SSLKEY').replace("@","=")
+      decoded_creds = base64.b64decode(filecontents)
+      with open('.ssl/client-key.pem', 'w') as f1:
+          f1.write(decoded_creds.decode("utf-8"))
+    
 
-# https://console.cloud.google.com/storage/browser/[bucket-id]/
-bucket = client.get_bucket('mgmt590-class')
+      #Change unix permissions to restricted
+      os.chmod(".ssl/server-ca.pem",0o600)
+      os.chmod(".ssl/client-cert.pem",0o600)
+      os.chmod(".ssl/client-key.pem",0o600)
 
-# Push our file to the bucket
-blob = bucket.blob('test.txt')
+      sslmode="sslmode=verify-ca"
+      sslrootcert = "sslrootcert=.ssl/server-ca.pem"
+      sslcert = "sslcert=.ssl/client-cert.pem"
+      sslkey = "sslkey=.ssl/client-key.pem"
+      hostaddr = "hostaddr={}".format(os.environ.get('PG_HOST'))
+      user = "user=postgres"
+      password = "password={}".format(os.environ.get('PG_PASSWORD'))
+      dbname="dbname=mgmt590"
 
-# Pull our file from the bucket
-print(blob.download_as_string())
+      dbconnect = " ".join([sslmode,
+                            sslrootcert,
+                            sslcert,
+                            sslkey,
+                            hostaddr,
+                            user,
+                            dbname,password])
+      conn = psycopg2.connect(dbconnect)
+    except Error as e:
+        print(e)
 
+    return conn
+
+
+
+#Function to run the sql queries..
+def runSqlQuery(query, params = None):
+    """
+    Query all rows in the tasks table
+    :param conn: the Connection object
+    :return:
+    """
+    conn = create_connection() 
+    cur = conn.cursor()
+    if params == None:
+        cur.execute(query)
+    else:
+        cur.execute(query,params)
+
+    conn.commit()
+
+    conn.close()
+    
+def insertInDB(csvfilename):
+    df = pd.read_csv(csvfilename)
+    for index,row in df.iterrows():
+        question = row['question']
+        context = row['context']
+        answer = row['answer']
+        modelName = 'distilled-bert'
+        timestamp = csvfilename.replace(".csv","")[-10:]
+        params = (modelName,question,context,answer,timestamp)
+        query = '''insert into answer_history(model_name, question, context, answer, timestamp) values(%s,%s,%s,%s,%s)'''
+        runSqlQuery(query, params)
+    
+
+
+for dirpath, dirs, files in os.walk("/pfs/getfiles"):
+   for file in files:
+       insertInDB(os.path.join(dirpath, file))

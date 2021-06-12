@@ -11,7 +11,7 @@
       "export GOOGLE_APPLICATION_CREDENTIALS=/app/creds.json",
       "python /app/gcs.py"
     ],
-    "image": "achippa2112/mgmt590-gcs:4558c973f583c0965b0aca469b499ff96bcf6c61",
+    "image": "achippa2112/mgmt590-gcs:c62ae53f62625c9625af43b982aeb0444c24a20f",
     "secrets": [ {
         "name": "gcsaccess",
         "env_var": "GCS_ACCESS",
