@@ -1,6 +1,5 @@
 from google.cloud import storage
 import os
-import python_pachyderm
 
 # creating a GCS client
 client = storage.Client()
