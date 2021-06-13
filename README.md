@@ -84,6 +84,15 @@ Below is a high-level diagram to show how the pipelines fit in the overall frame
  - Check the repositories created using below command
    ```
    pachctl list repo
+   NAME          CREATED        SIZE (MASTER) ACCESS LEVEL
+   push-answers  45 seconds ago 0B            OWNER        Output repo for pipeline push-answers.
+   getfiles      51 seconds ago 0B            OWNER        Output repo for pipeline getfiles.
+   getfiles_tick 51 seconds ago 0B            OWNER        Cron tick repo for pipeline getfiles.
    ```
- 
+ - Use the below command to check the files created in the repo
+   ```
+   pachctl list file getfiles@master
+   NAME                                 TYPE SIZE
+   /Example_Data_-_Sheet11623559625.csv file 2.231KiB
+   ```
   
