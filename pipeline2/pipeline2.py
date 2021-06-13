@@ -20,18 +20,19 @@ def runSqlQuery(query, params = None):
     filecontents = os.environ.get('PG_SSLROOTCERT').replace("@","=")
     decoded_creds = base64.b64decode(filecontents)
     with open('.ssl/server-ca.pem', 'w') as f1:
-        f1.write(str(decoded_creds))
+        f1.write(decoded_creds.decode("utf-8"))
       
     filecontents = os.environ.get('PG_SSLCERT').replace("@","=")
     decoded_creds = base64.b64decode(filecontents)
-    with open('.ssl/client-cert.pem', 'w') as f1:
-        f1.write(str(decoded_creds))
+    with open('.ssl/client-cert.pem', 'w') as f2:
+        f2.write(decoded_creds.decode("utf-8"))
           
     filecontents = os.environ.get('PG_SSLKEY').replace("@","=")
     decoded_creds = base64.b64decode(filecontents)
-    with open('.ssl/client-key.pem', 'w') as f1:
-        f1.write(str(decoded_creds))
+    with open('.ssl/client-key.pem', 'w') as f3:
+        f3.write(decoded_creds.decode("utf-8"))
     
+
 
     #Change unix permissions to restricted
     os.chmod(".ssl/server-ca.pem",0o600)
