@@ -9,7 +9,7 @@
       "echo $GCS_ACCESS > /app/rawcreds.txt",
       "base64 --decode /app/rawcreds.txt > /app/creds.json",
       "export GOOGLE_APPLICATION_CREDENTIALS=/app/creds.json",
-      "python /app/gcs.py"
+      "python /app/pipeline1.py"
     ],
     "image": "achippa2112/mgmt590-gcs:c62ae53f62625c9625af43b982aeb0444c24a20f",
     "secrets": [ {
